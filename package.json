@@ -1,0 +1,8 @@
+{
+  "name": "purify",
+  "version": "0.0.1",
+  "main": "purify-cli.js",
+  "repository": "git@github.com:IgorMinar/purify.git",
+  "author": "Igor Minar <igor@angular.io>",
+  "license": "MIT"
+}
