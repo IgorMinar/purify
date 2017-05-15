@@ -1,4 +1,4 @@
-module.exports = function(fileBody) {
+module.exports = function(fileBody, fileName) {
     return fileBody
       /* prefix downleveled classes w/ the @__PURE__ annotation */
       .replace(
@@ -29,6 +29,11 @@ module.exports = function(fileBody) {
         .replace(
             /^var __param = \(.*\n(    .*\n)*\};\n/mg,
             '\n\n\n'
+        )
+        /* strip all polyfills except for zones, global, and polyfill.ts that inits stuff */
+        .replace(
+            fileName.startsWith('polyfills.') ? /^(\/\*{3}\/ "[^"]+":)\n(^(?!Zone\.__load_patch\(|var g;| \* Zone JS is required by Angular)(.*\n))+?^\/\*{3}\/ }\)/mg : 'someT0tal_N0nsense:-) to disable this replace for non-polyfills',
+            '$1 function(){}'
         )
         /* strip all license headers / comments */
         .replace(

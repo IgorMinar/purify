@@ -11,7 +11,7 @@ PurifyPlugin.prototype.apply = function(compiler) {
         chunk.files.filter((fileName) => fileName.endsWith('.bundle.js')).forEach((fileName)  => {
           console.log(`purifying ${fileName}`);
 
-          const purifiedSource = purify(compilation.assets[fileName].source());
+          const purifiedSource = purify(compilation.assets[fileName].source(), fileName);
           compilation.assets[fileName]._cachedSource = purifiedSource;
           compilation.assets[fileName]._source.source = () => purifiedSource;
         });
