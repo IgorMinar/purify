@@ -20,6 +20,11 @@ module.exports = function(fileBody, fileName) {
             /new __WEBPACK_IMPORTED_MODULE_\w+__angular_core__\["\w+" \/\* SkipSelf \*\/]/mg,
             '/*@__PURE__*/$&'
         )
+        /* prefix all forwardRef callsites w/ the @__PURE__ annotation */
+        .replace(
+            /__webpack_require__\.\w+\(__WEBPACK_IMPORTED_MODULE_\w+__angular_core__\["[^"]+" \/\* forwardRef \*\/\]\)\(function \(\) \{/mg,
+            '/*@__PURE__*/$&'
+        )
         /* strip __extends helper */
         .replace(
             /^var __extends = \(.*\n(    .*\n)*\};\n/mg,
