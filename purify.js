@@ -25,6 +25,31 @@ module.exports = function(fileBody, fileName) {
             /__webpack_require__\.\w+\(__WEBPACK_IMPORTED_MODULE_\w+__angular_core__\["[^"]+" \/\* forwardRef \*\/\]\)\(function \(\) \{/mg,
             '/*@__PURE__*/$&'
         )
+        /* prefix all animation trigger() callsites w/ the @__PURE__ annotation */
+        .replace(
+            /__webpack_require__\.\w+\(__WEBPACK_IMPORTED_MODULE_\w+__angular_animations__\["[^"]+" \/\* trigger \*\/\]\)\(['"][^"]+['"]/mg,
+            '/*@__PURE__*/$&'
+        )
+        /* prefix all animation state() callsites w/ the @__PURE__ annotation */
+        .replace(
+            /__webpack_require__\.\w+\(__WEBPACK_IMPORTED_MODULE_\w+__angular_animations__\["[^"]+" \/\* state \*\/\]\)\(['"][^"]+['"]/mg,
+            '/*@__PURE__*/$&'
+        )
+        /* prefix all animation style() callsites w/ the @__PURE__ annotation */
+        .replace(
+            /__webpack_require__\.\w+\(__WEBPACK_IMPORTED_MODULE_\w+__angular_animations__\["[^"]+" \/\* style \*\/\]\)\(\{/mg,
+            '/*@__PURE__*/$&'
+        )
+        /* prefix all animation transition() callsites w/ the @__PURE__ annotation */
+        .replace(
+            /__webpack_require__\.\w+\(__WEBPACK_IMPORTED_MODULE_\w+__angular_animations__\["[^"]+" \/\* transition \*\/\]\)\(['"][^"]+['"]/mg,
+            '/*@__PURE__*/$&'
+        )
+        /* prefix all animation animate() callsites w/ the @__PURE__ annotation */
+        .replace(
+            /__webpack_require__\.\w+\(__WEBPACK_IMPORTED_MODULE_\w+__angular_animations__\["[^"]+" \/\* animate \*\/\]\)\(['"][^"]+['"]/mg,
+            '/*@__PURE__*/$&'
+        )
         /* strip __extends helper */
         .replace(
             /^var __extends = \(.*\n(    .*\n)*\};\n/mg,
