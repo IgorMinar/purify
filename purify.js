@@ -57,7 +57,7 @@ module.exports = function(fileBody, fileName) {
         )
         /* strip __extends helper */
         .replace(
-            /^var __extends = \(.*\n(    .*\n)*\};\n/mg,
+            /^var __extends = \(.*\n(    .*\n)*\};*(\)\(\);)*/mg,
             '\n\n\n\n\n'
         )
         /* strip __decorate helper */
