@@ -25,6 +25,11 @@ module.exports = function(fileBody, fileName) {
             /__webpack_require__\.\w+\(__WEBPACK_IMPORTED_MODULE_\w+__angular_core__\["[^"]+" \/\* forwardRef \*\/\]\)\(function \(\) \{/mg,
             '/*@__PURE__*/$&'
         )
+        /* prefix all mixinDisabled callsites w/ the @__PURE__ annotation */
+        .replace(
+            /mixinDisabled\(Md\S+\)/mg,
+            '/*@__PURE__*/$&'
+        )
         /* prefix all animation trigger() callsites w/ the @__PURE__ annotation */
         .replace(
             /__webpack_require__\.\w+\(__WEBPACK_IMPORTED_MODULE_\w+__angular_animations__\["[^"]+" \/\* trigger \*\/\]\)\(['"][^"]+['"]/mg,
