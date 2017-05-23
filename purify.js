@@ -10,6 +10,16 @@ module.exports = function(fileBody, fileName) {
           /^(var (\S+) = )(\(function \(_super\) \{\n    __extends\(\2, _super\);\n)/mg,
           '$1/*@__PURE__*/$3'
       )
+        /* prefix new Optional() w/ the @__PURE__ annotation */
+        .replace(
+            /new __WEBPACK_IMPORTED_MODULE_\w+__angular_core__\["\w+" \/\* Optional \*\/]/mg,
+            '/*@__PURE__*/$&'
+        )
+        /* prefix new SkipSelf() w/ the @__PURE__ annotation */
+        .replace(
+            /new __WEBPACK_IMPORTED_MODULE_\w+__angular_core__\["\w+" \/\* SkipSelf \*\/]/mg,
+            '/*@__PURE__*/$&'
+        )
         /* strip __extends helper */
         .replace(
             /^var __extends = \(.*\n(    .*\n)*\};\n/mg,
