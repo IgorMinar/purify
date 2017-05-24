@@ -1,5 +1,5 @@
 module.exports = function(fileBody, fileName) {
-    return fileBody
+    let newFileBody = fileBody
         /* prefix downleveled classes w/ the @__PURE__ annotation */
         .replace(
             /^(var (\S+) = )(\(function \(\) \{\n(?:    (?:\/\*\*| \*|\*\/|\/\/)[^\n]*\n)*    function \2\([^\)]*\) \{\n)/mg,
@@ -89,5 +89,11 @@ module.exports = function(fileBody, fileName) {
         .replace(
             /\/\*\*\n\s+\* @license.*\n(\s+\*[^\/].*\n)*\s+\*\//mg,
             '\n'
-        )
+        );
+
+    if (fileName.startsWith('polyfills.')) {
+      newFileBody += '\n\n' + fs.readFileSync('node_modules/tslib/tslib.js').toString();
+    }
+
+    return newFileBody;
 };
