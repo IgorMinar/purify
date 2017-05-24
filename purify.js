@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 module.exports = function(fileBody, fileName) {
   let newFileBody = fileBody
       /* prefix downleveled classes w/ the @__PURE__ annotation */
