@@ -82,7 +82,7 @@ module.exports = function(fileBody, fileName) {
         )
         /* strip all license headers / comments */
         .replace(
-            /\/\*\*\n \* @license.*\n( \*[^/].*\n)* \*\//mg,
+            /\/\*\*\n\s+\* @license.*\n(\s+\*[^\/].*\n)*\s+\*\//mg,
             '\n'
         )
 };
