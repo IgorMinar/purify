@@ -20,16 +20,6 @@ module.exports = function(fileBody, fileName) {
             /__webpack_require__\.\w+\(__WEBPACK_IMPORTED_MODULE_\w+__angular_core__\["[^"]+" \/\* forwardRef \*\/\]\)\(function \(\) \{/mg,
             '/*@__PURE__*/$&'
         )
-        /* prefix all mixinDisabled callsites w/ the @__PURE__ annotation */
-        .replace(
-            /mixinDisabled\(Md\S+\)/mg,
-            '/*@__PURE__*/$&'
-        )
-        /* prefix new OverlayState/ConnectionPositionPair w/ the @__PURE__ annotation */
-        .replace(
-            /new (OverlayState|ConnectionPositionPair)\(/mg,
-            '/*@__PURE__*/$&'
-        )
         /* wrap enums w/ an IIFE and prefix the @__PURE__ annotation */
         .replace(
             /var (\S+) = \{\};\n(\1\.(\S+) = \d+;\n)+\1\[\1\.(\S+)\] = "\4";\n(\1\[\1\.(\S+)\] = "\S+";\n*)+/mg,
@@ -58,6 +48,21 @@ module.exports = function(fileBody, fileName) {
         /* prefix all animation animate() callsites w/ the @__PURE__ annotation */
         .replace(
             /__webpack_require__\.\w+\(__WEBPACK_IMPORTED_MODULE_\w+__angular_animations__\["[^"]+" \/\* animate \*\/\]\)\(['"][^"]+['"]/mg,
+            '/*@__PURE__*/$&'
+        )
+        /* prefix all Material's mixinDisabled callsites w/ the @__PURE__ annotation */
+        .replace(
+            /mixinDisabled\(Md\S+\)/mg,
+            '/*@__PURE__*/$&'
+        )
+        /* prefix all Material's range callsites w/ the @__PURE__ annotation */
+        .replace(
+            /range\(\d+, function \(\w\) \{[^\}]+\}\);/mg,
+            '/*@__PURE__*/$&'
+        )
+        /* prefix Material's new OverlayState/ConnectionPositionPair w/ the @__PURE__ annotation */
+        .replace(
+            /new (OverlayState|ConnectionPositionPair)\(/mg,
             '/*@__PURE__*/$&'
         )
         /* strip __extends helper */
