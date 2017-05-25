@@ -27,6 +27,11 @@ module.exports = function(fileBody, fileName) {
           /var (\S+) = \{\};\n(\1\.(\S+) = \d+;\n)+\1\[\1\.(\S+)\] = "\4";\n(\1\[\1\.(\S+)\] = "\S+";\n*)+/mg,
           'var $1 = /*@__PURE__*/(function() {\n$&; return $1;})();\n'
       )
+      /* wrap TS 2.3 enums w/ an IIFE and prefix the @__PURE__ annotation */
+      .replace(
+          /var (\S+);\n\(function \(\1\) \{\s+(\1\[\1\["(\S+)"\] = 0\] = "\3";(\s+\1\[\1\["\S+"\] = \d\] = "\S+";)*\n)\}\)\(\1 \|\| \(\1 = \{\}\)\);/mg,
+          'var $1 = /*@__PURE__*/(function() {\n    var $1 = {};\n    $2    return $1;\n})();'
+      )
       /* prefix all animation trigger() callsites w/ the @__PURE__ annotation */
       .replace(
           /__webpack_require__\.\w+\(__WEBPACK_IMPORTED_MODULE_\w+__angular_animations__\["[^"]+" \/\* trigger \*\/\]\)\(['"][^"]+['"]/mg,
