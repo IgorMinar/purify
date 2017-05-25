@@ -25,7 +25,7 @@ module.exports = function(fileBody, fileName) {
       /* wrap TS 2.2 enums w/ an IIFE and prefix the @__PURE__ annotation */
       .replace(
           /var (\S+) = \{\};\n(\1\.(\S+) = \d+;\n)+\1\[\1\.(\S+)\] = "\4";\n(\1\[\1\.(\S+)\] = "\S+";\n*)+/mg,
-          '/*@__PURE__*/(function() {\n$&})();\n'
+          'var $1 = /*@__PURE__*/(function() {\n$&; return $1;})();\n'
       )
       /* prefix all animation trigger() callsites w/ the @__PURE__ annotation */
       .replace(
