@@ -1,6 +1,12 @@
 const fs = require('fs');
 
+// This matches a comment left by the ngo-loader that contains pure import paths
+const importCommentRegex = /\/\*\* PURE_IMPORTS_START (\S+) PURE_IMPORTS_END \*\//mg;
+
 module.exports = function(fileBody, fileName) {
+
+  const pureImportMatches = getMatches(fileBody, importCommentRegex, 1).join('|');
+
   let newFileBody = fileBody
       /* wrap TS 2.2 enums w/ an IIFE */
       .replace(
@@ -11,6 +17,16 @@ module.exports = function(fileBody, fileName) {
       .replace(
           /var (\S+);\n\(function \(\1\) \{\s+(\1\[\1\["(\S+)"\] = 0\] = "\3";(\s+\1\[\1\["\S+"\] = \d\] = "\S+";)*\n)\}\)\(\1 \|\| \(\1 = \{\}\)\);/mg,
           'var $1 = /*@__PURE__*/(function() {\n    var $1 = {};\n    $2    return $1;\n})();'
+      )
+      /* Prefix safe imports with pure */
+      .replace(
+          new RegExp(`(_(${pureImportMatches})__ = )(__webpack_require__\\("\\S+"\\));`, 'mg'),
+          '$1/*@__PURE__*/$3'
+      )
+      /* Prefix default safe imports with pure */
+      .replace(
+          new RegExp(`(_(${pureImportMatches})___default = )(__webpack_require__\\.\\w\\(\\S+\\));`, 'mg'),
+          '$1/*@__PURE__*/$3'
       )
       /* strip __extends helper */
       .replace(
@@ -44,3 +60,12 @@ module.exports = function(fileBody, fileName) {
 
   return newFileBody;
 };
+
+function getMatches(str, regex, index) {
+    var matches = [];
+    var match;
+    while(match = regex.exec(str)) {
+        matches = matches.concat(match[index].split(','));
+    }
+    return matches;
+}
