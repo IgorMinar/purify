@@ -15,7 +15,7 @@ module.exports = function(fileBody, fileName) {
       )
       /* wrap TS 2.3 enums w/ an IIFE */
       .replace(
-          /var (\S+);(\/\*__PURE__\*\/)*\n\(function \(\1\) \{\s+(\1\[\1\["(\S+)"\] = 0\] = "\4";(\s+\1\[\1\["\S+"\] = \d\] = "\S+";)*\n)\}\)\(\1 \|\| \(\1 = \{\}\)\);/mg,
+          /var (\S+);(\/\*@__PURE__\*\/)*\n\(function \(\1\) \{\s+(\1\[\1\["(\S+)"\] = 0\] = "\4";(\s+\1\[\1\["\S+"\] = \d\] = "\S+";)*\n)\}\)\(\1 \|\| \(\1 = \{\}\)\);/mg,
           'var $1 = /*@__PURE__*/(function() {\n    var $1 = {};\n    $3    return $1;\n})();'
       )
       /* Prefix safe imports with pure */
