@@ -28,6 +28,11 @@ module.exports = function(fileBody, fileName) {
           new RegExp(`(_(${pureImportMatches})___default = )(__webpack_require__\\.\\w\\(\\S+\\));`, 'mg'),
           '$1/*@__PURE__*/$3'
       )
+      /* Prefix CCF and CMF statements */
+      .replace(
+          /__WEBPACK_IMPORTED_MODULE_0__angular_core__\["_\w+" \/\* (ɵccf|ɵcmf) \*\/\]\(/mg,
+          '/*@__PURE__*/$&'
+      )
       /* strip __extends helper */
       .replace(
           /^var __extends = \(.*\n(    .*\n)*\};*(\)\(\);)*/mg,
