@@ -8,6 +8,16 @@ module.exports = function(fileBody, fileName) {
   const pureImportMatches = getMatches(fileBody, importCommentRegex, 1).join('|');
 
   let newFileBody = fileBody
+      /* prefix downleveled classes w/ the @__PURE__ annotation */
+      .replace(
+          /^(var (\S+) = )(\(function \(\) \{\n(?:    (?:\/\*\*| \*|\*\/|\/\/)[^\n]*\n)*    function \2\([^\)]*\) \{\n)/mg,
+          '$1/*@__PURE__*/$3'
+      )
+      /* prefix downleveled classes that extend another class w/ the @__PURE__ annotation */
+      .replace(
+          /^(var (\S+) = )(\(function \(_super\) \{\n    \w*__extends\(\w+, _super\);\n)/mg,
+          '$1/*@__PURE__*/$3'
+      )
       /* wrap TS 2.2 enums w/ an IIFE */
       .replace(
           /var (\S+) = \{\};\n(\1\.(\S+) = \d+;\n)+\1\[\1\.(\S+)\] = "\4";\n(\1\[\1\.(\S+)\] = "\S+";\n*)+/mg,
@@ -30,7 +40,13 @@ module.exports = function(fileBody, fileName) {
       )
       /* Prefix CCF and CMF statements */
       .replace(
-          /__WEBPACK_IMPORTED_MODULE_0__angular_core__\["_\w+" \/\* (ɵccf|ɵcmf) \*\/\]\(/mg,
+          /\w*__WEBPACK_IMPORTED_MODULE_\d+__angular_core__\["\w+" \/\* (ɵccf|ɵcmf) \*\/\]\(/mg,
+          '/*@__PURE__*/$&'
+      )
+
+      /* Prefix module statements */
+      .replace(
+          /new \w*__WEBPACK_IMPORTED_MODULE_\d+__angular_core__\["\w+" \/\* NgModuleFactory \*\/\]/mg,
           '/*@__PURE__*/$&'
       )
       /* strip __extends helper */
